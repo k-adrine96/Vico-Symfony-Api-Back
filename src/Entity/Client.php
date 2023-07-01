@@ -3,17 +3,31 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client
+class Client implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 128, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(length: 96)]
+    private ?string $password = null;
 
     #[ORM\Column(length: 96)]
     private ?string $first_name = null;
@@ -21,14 +35,8 @@ class Client
     #[ORM\Column(length: 96)]
     private ?string $last_name = null;
 
-    #[ORM\Column(length: 128)]
+    #[ORM\Column(length: 128, unique: true)]
     private ?string $username = null;
-
-    #[ORM\Column(length: 128)]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 96)]
-    private ?string $password = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -44,6 +52,18 @@ class Client
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     public function getFirstName(): ?string
@@ -82,30 +102,6 @@ class Client
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -119,6 +115,50 @@ class Client
     }
 
     /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+        /**
      * @return Collection<int, Rating>
      */
     public function getRatings(): Collection
@@ -126,25 +166,34 @@ class Client
         return $this->ratings;
     }
 
-    public function addRating(Rating $rating): static
+    // public function addRating(Rating $rating): static
+    // {
+    //     if (!$this->ratings->contains($rating)) {
+    //         $this->ratings->add($rating);
+    //         $rating->setClient($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeRating(Rating $rating): static
+    // {
+    //     if ($this->ratings->removeElement($rating)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($rating->getClient() === $this) {
+    //             $rating->setClient(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        if (!$this->ratings->contains($rating)) {
-            $this->ratings->add($rating);
-            $rating->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRating(Rating $rating): static
-    {
-        if ($this->ratings->removeElement($rating)) {
-            // set the owning side to null (unless already changed)
-            if ($rating->getClient() === $this) {
-                $rating->setClient(null);
-            }
-        }
-
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }

@@ -100,25 +100,25 @@ class Vico
         return $this->ratings;
     }
 
-    public function addRating(Rating $rating): static
-    {
-        if (!$this->ratings->contains($rating)) {
-            $this->ratings->add($rating);
-            $rating->setVico($this);
-        }
+    // public function addRating(Rating $rating): static
+    // {
+    //     if (!$this->ratings->contains($rating)) {
+    //         $this->ratings->add($rating);
+    //         $rating->setVico($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeRating(Rating $rating): static
-    {
-        if ($this->ratings->removeElement($rating)) {
-            // set the owning side to null (unless already changed)
-            if ($rating->getVico() === $this) {
-                $rating->setVico(null);
-            }
-        }
+    // public function removeRating(Rating $rating): static
+    // {
+    //     if ($this->ratings->removeElement($rating)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($rating->getVico() === $this) {
+    //             $rating->setVico(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

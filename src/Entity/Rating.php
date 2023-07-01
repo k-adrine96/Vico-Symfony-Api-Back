@@ -31,6 +31,7 @@ class Rating
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+
     #[ORM\ManyToOne(inversedBy: 'ratings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
@@ -112,39 +113,39 @@ class Rating
         return $this;
     }
 
-    public function getVico(): ?Vico
-    {
-        return $this->vico;
-    }
+    // public function getVico(): ?Vico
+    // {
+    //     return $this->vico;
+    // }
 
-    public function setVico(?Vico $vico): static
-    {
-        $this->vico = $vico;
+    // public function setVico(?Vico $vico): static
+    // {
+    //     $this->vico = $vico;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getProject(): ?Project
+    public function getProjectId(): ?Project
     {
         return $this->project;
     }
 
-    public function setProject(?Project $project): static
+    public function setProjectId(?Project $project_id): static
     {
-        $this->project = $project;
+        $this->project = $project_id;
 
         return $this;
     }
 
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
+    // public function getClient(): ?Client
+    // {
+    //     return $this->client;
+    // }
 
-    public function setClient(?Client $client): static
-    {
-        $this->client = $client;
+    // public function setClient(?Client $client): static
+    // {
+    //     $this->client = $client;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

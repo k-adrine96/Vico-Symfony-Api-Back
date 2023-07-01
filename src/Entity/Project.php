@@ -101,7 +101,7 @@ class Project
     {
         if (!$this->ratings->contains($rating)) {
             $this->ratings->add($rating);
-            $rating->setProject($this);
+            $rating->setProjectId($this);
         }
 
         return $this;
@@ -111,8 +111,8 @@ class Project
     {
         if ($this->ratings->removeElement($rating)) {
             // set the owning side to null (unless already changed)
-            if ($rating->getProject() === $this) {
-                $rating->setProject(null);
+            if ($rating->getProjectId() === $this) {
+                $rating->setProjectId(null);
             }
         }
 
