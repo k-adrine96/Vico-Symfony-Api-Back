@@ -53,8 +53,8 @@ final class ClientFactory extends ModelFactory
             'last_name'  => $faker->name(1),
             'email'      => $faker->unique()->email(),
             'username'   => $faker->unique()->word(1),
-            'password'   => '123456',
-            'roles'      => [],
+            'password'   => '$2y$04$sar64pjldcPcSLqDI4M2.uAgU.VjjOrBS3zLyrDFTsIvolH76jwSu',
+            'roles'      => ["ROLE_USER"],
         ];
     }
 

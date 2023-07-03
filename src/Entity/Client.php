@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+// use Doctrine\Common\Collections\ArrayCollection;
+// use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client implements UserInterface, PasswordAuthenticatedUserInterface
@@ -41,12 +43,12 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Rating::class)]
-    private Collection $ratings;
+    #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Project::class)]
+    private Collection $projects;
 
     public function __construct()
     {
-        $this->ratings = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,36 +160,6 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-        /**
-     * @return Collection<int, Rating>
-     */
-    public function getRatings(): Collection
-    {
-        return $this->ratings;
-    }
-
-    // public function addRating(Rating $rating): static
-    // {
-    //     if (!$this->ratings->contains($rating)) {
-    //         $this->ratings->add($rating);
-    //         $rating->setClient($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeRating(Rating $rating): static
-    // {
-    //     if ($this->ratings->removeElement($rating)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($rating->getClient() === $this) {
-    //             $rating->setClient(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
     /**
      * @see UserInterface
      */
@@ -195,5 +167,35 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->setCreatorId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            // set the owning side to null (unless already changed)
+            if ($project->getCreatorId() === $this) {
+                $project->setCreatorId(null);
+            }
+        }
+
+        return $this;
     }
 }

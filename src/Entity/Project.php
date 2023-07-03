@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -21,20 +19,12 @@ class Project
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $creator = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Vico $vico = null;
-
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Rating::class)]
-    private Collection $ratings;
-
-    public function __construct()
-    {
-        $this->ratings = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -85,36 +75,6 @@ class Project
     public function setVicoId(?Vico $vico_id): static
     {
         $this->vico = $vico_id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Rating>
-     */
-    public function getRatings(): Collection
-    {
-        return $this->ratings;
-    }
-
-    public function addRating(Rating $rating): static
-    {
-        if (!$this->ratings->contains($rating)) {
-            $this->ratings->add($rating);
-            $rating->setProjectId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRating(Rating $rating): static
-    {
-        if ($this->ratings->removeElement($rating)) {
-            // set the owning side to null (unless already changed)
-            if ($rating->getProjectId() === $this) {
-                $rating->setProjectId(null);
-            }
-        }
 
         return $this;
     }

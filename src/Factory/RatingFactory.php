@@ -52,7 +52,7 @@ final class RatingFactory extends ModelFactory
             'created_at' => \DateTimeImmutable::createFromMutable($faker->dateTime()),
             'money_value_rate' => $faker->numberBetween(0,5),
             'overall_satisfication_rate' => $faker->numberBetween(1,5),
-            'project_id' => ProjectFactory::random(),
+            // 'project_id' => ProjectFactory::random(),
             'review_text' => $faker->text(1000),
             'work_quality_rate' => $faker->numberBetween(0,5),
         ];

@@ -21,16 +21,12 @@ class Vico
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'vico_id', targetEntity: Project::class)]
+    #[ORM\OneToMany(mappedBy: 'vico', targetEntity: Project::class)]
     private Collection $projects;
-
-    #[ORM\OneToMany(mappedBy: 'vico', targetEntity: Rating::class, orphanRemoval: true)]
-    private Collection $ratings;
 
     public function __construct()
     {
         $this->projects = new ArrayCollection();
-        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,34 +87,4 @@ class Vico
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Rating>
-     */
-    public function getRatings(): Collection
-    {
-        return $this->ratings;
-    }
-
-    // public function addRating(Rating $rating): static
-    // {
-    //     if (!$this->ratings->contains($rating)) {
-    //         $this->ratings->add($rating);
-    //         $rating->setVico($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeRating(Rating $rating): static
-    // {
-    //     if ($this->ratings->removeElement($rating)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($rating->getVico() === $this) {
-    //             $rating->setVico(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
 }

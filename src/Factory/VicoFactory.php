@@ -49,7 +49,7 @@ final class VicoFactory extends ModelFactory
         $faker = self::faker();
         return [
             'created_at' => \DateTimeImmutable::createFromMutable($faker->dateTime()),
-            'name' => $faker->word(3),
+            'name' => $faker->word(),
         ];
     }
 
