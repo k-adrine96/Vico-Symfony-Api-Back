@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-// use Doctrine\Common\Collections\ArrayCollection;
-// use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client implements UserInterface, PasswordAuthenticatedUserInterface

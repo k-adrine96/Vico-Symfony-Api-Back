@@ -17,7 +17,6 @@ class ProjectController extends AbstractController
     #[Route(path: '/projects/clientId={clientId}', name: 'projects', methods: ['get'])]
     public function index(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
-        dd($request->headers);
         $clientId = $request->request->get('clientId');
         $projects = $doctrine
             ->getRepository(Project::class)
@@ -38,10 +37,10 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/projects/{id}', name: 'rate_show', methods: ['get'])]
-    public function show(ManagerRegistry $doctrine,Request $request, int $id): JsonResponse
+    public function show(ManagerRegistry $doctrine,Request $request, $id): JsonResponse
     {
         $id = $request->request->get('projectId');
-        $project = $doctrine->getRepository(Project::class)->find($id);
+        $project = $doctrine->getRepository(Project::class)->find('id', $id);
         $vicoId = $project->getVicoId();
         $vico = $doctrine->getRepository(Vico::class)->find('id', $vicoId);
         $rate = $doctrine->getRepository(Rating::class)->find('project_id', $id);
